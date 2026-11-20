@@ -3,7 +3,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--bg:#090a0e;--ln:#262a37;--tx:#f4f0e8;--mu:#8a8fa5;--g1:#f7e2ae;--g2:#e2b866;--g3:#a9792e;--serif:"Bodoni 72","Didot","Songti SC","Noto Serif SC","Source Han Serif SC",serif}
-@property --kx{syntax:'<number>';inherits:true;initial-value:0}@property --ky{syntax:'<number>';inherits:true;initial-value:0}
 html,body{height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif;overflow:hidden}
 button{position:relative;font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
 /* touch feedback: ripple inside buttons, impact ring on the stage, a soft light that follows the pointer, a tinted flash on good reveals */
@@ -70,7 +69,7 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 #ttl,#pool,#hud{transition:opacity .3s}#ttl b{font-family:var(--serif);font-size:17px;letter-spacing:.4px}
 #stage.focus :is(#ttl,#pool,#hud){opacity:0}#stage.focus #play{pointer-events:none}
 #stage.focus :is(.u,.sl,.sc,.bl,.hd):not(.act){opacity:.16;transition:opacity .35s}#stage.focus .rp g:not(.cur){opacity:.2}.bl.act{will-change:auto}#stage.focus .act.mine:before{display:none}
-#rays{position:absolute;left:50%;top:44%;z-index:0;width:max(150cqi,760px);aspect-ratio:1;translate:-50% -50%;scale:.4;opacity:0;pointer-events:none;transition:opacity .5s,scale .7s cubic-bezier(.2,1.2,.4,1);background:repeating-conic-gradient(color-mix(in srgb,var(--tc,#e2b866) 55%,transparent) 0 5deg,transparent 5deg 18deg);-webkit-mask:radial-gradient(circle,#000 0,#000a 14%,transparent 42%);mask:radial-gradient(circle,#000 0,#000a 14%,transparent 42%);animation:spin 24s linear infinite}
+#rays{position:absolute;left:50%;top:44%;z-index:0;width:max(150cqi,760px);aspect-ratio:1;translate:-50% -50%;scale:.4;opacity:0;pointer-events:none;transition:opacity .5s,scale .7s cubic-bezier(.2,1.2,.4,1);background:repeating-conic-gradient(color-mix(in srgb,var(--tc,#e2b866) 55%,transparent) 0 5deg,transparent 5deg 18deg);-webkit-mask:radial-gradient(circle,#000 0,#000a 14%,transparent 42%);mask:radial-gradient(circle,#000 0,#000a 14%,transparent 42%)}
 #rays.on{opacity:var(--ro,.5);scale:1}
 #cap{position:absolute;left:0;right:0;top:calc(44% + var(--ch,110px));z-index:7;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 20px;text-align:center;pointer-events:none;opacity:0;transform:translateY(14px);transition:opacity .25s,transform .4s cubic-bezier(.2,1.4,.4,1)}
 #cap.on{opacity:1;transform:none}
@@ -80,6 +79,13 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 .seal{position:absolute;left:50%;top:42%;z-index:8;width:148px;aspect-ratio:1;margin:-74px 0 0 -74px;border-radius:50%;display:grid;place-content:center;justify-items:center;gap:3px;pointer-events:none;color:var(--g1);background:radial-gradient(circle,#161822f5 0 60%,#0c0d13f5 61%);box-shadow:inset 0 0 0 2px var(--g2),inset 0 0 0 7px #0c0d13,inset 0 0 0 8px #e2b86680,0 18px 44px #000d;animation:seal 1.9s cubic-bezier(.2,.9,.3,1) both}
 .seal svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.seal b{font-family:var(--serif);font-size:21px;letter-spacing:5px;padding-left:5px}.seal small{font-size:9px;letter-spacing:1px;color:var(--mu)}
 @keyframes seal{0%{opacity:0;transform:scale(2.4) rotate(-16deg)}13%{opacity:1;transform:scale(.93) rotate(-8deg)}20%,80%{opacity:1;transform:scale(1) rotate(-8deg)}100%{opacity:0;transform:scale(.92) rotate(-8deg) translateY(-12px)}}
+/* hint: shown when a tap or a short stroke opened nothing; says what the hand should do, and a ghost fingertip shows the stroke */
+#hint{position:absolute;left:0;top:0;z-index:9;display:flex;align-items:center;gap:7px;padding:7px 12px 7px 9px;border-radius:12px;background:linear-gradient(180deg,var(--g1),var(--g2));color:#1a1408;font-size:12.5px;font-weight:800;white-space:nowrap;box-shadow:0 10px 26px #000c;pointer-events:none;opacity:0;transform:translate(-50%,-100%) scale(.85);transition:opacity .2s,transform .3s cubic-bezier(.2,1.6,.4,1)}
+#hint.on{opacity:1;transform:translate(-50%,-100%)}#hint.below{transform:translate(-50%,0) scale(.85)}#hint.below.on{transform:translate(-50%,0)}
+#hint:after{content:'';position:absolute;left:var(--ax,50%);bottom:-4px;width:10px;height:10px;margin-left:-5px;background:var(--g2);transform:rotate(45deg)}#hint.below:after{bottom:auto;top:-4px;background:var(--g1)}
+#hint svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;animation:nu .8s ease-in-out infinite}
+#hint.d-up svg{--nx:0px;--ny:-3px}#hint.d-down svg{--nx:0px;--ny:3px}#hint.d-lr svg,#hint.d-rub svg{--nx:3px;--ny:0px}#hint.d-drag svg{--nx:2px;--ny:-2px}@keyframes nu{50%{transform:translate(var(--nx),var(--ny))}}
+.fgr{position:absolute;z-index:86;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;pointer-events:none;background:#ffffff59;box-shadow:0 0 0 2px #fff,0 0 14px #fff;opacity:0}
 /* prize tile */
 .tl{position:relative;width:100%;height:100%}
 .tl-b{position:relative;width:100%;height:100%;border-radius:16%;background:linear-gradient(145deg,#f6f4ef,#d6d2c8);overflow:hidden;display:grid;place-items:center;font-size:calc(var(--s)*.34);transition:box-shadow .4s}
@@ -110,6 +116,13 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 .u-gl{position:absolute;left:50%;top:48%;width:12%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff,color-mix(in srgb,var(--tc) 70%,#fff) 40%,transparent 70%);transform:translate(-50%,-50%) scale(0);opacity:0;z-index:0;mix-blend-mode:screen}
 .u.open .u-gl{animation:glow calc(.85s*var(--k)) ease-out}@keyframes glow{0%{transform:translate(-50%,-50%) scale(0);opacity:1}100%{transform:translate(-50%,-50%) scale(14);opacity:0}}
 @keyframes wig{25%{transform:rotate(-3deg) translateX(-2%)}75%{transform:rotate(3deg) translateX(2%)}}
+/* opened by hand: while a wrapper is being worked, its moving part tracks the stroke */
+.u.drag .u-w{animation:none!important}
+.t0.drag .bx-lid{transform:translate(calc(var(--p)*-10%),calc(var(--p)*-80%)) rotate(calc(var(--p)*-12deg));transition:none}.t0.drag .u-gl{opacity:var(--p);transform:translate(-50%,-50%) scale(calc(var(--p)*5))}
+.t1.drag .bg-tear{width:calc(var(--p)*74%)}.t1.drag .bg-top{transform:translateY(calc(var(--p)*-10%)) rotate(calc(var(--p)*5deg));transition:none}
+.t2.drag .cp-t{transform:translateY(calc(var(--p)*-12%)) rotate(calc(var(--tw,0)*1deg));transition:none}.t2.drag .cp-b{transform:rotate(calc(var(--tw,0)*-.35deg));transition:none}
+.t3.drag .u-in{transform:translateY(-5%) scale(1.05)}.t3.drag .cd-b{transform:rotateY(calc(var(--p)*82deg));transition:none}.t3.drag .u-pz{transform:rotateY(calc(-180deg + var(--p)*82deg));transition:none}
+.t4.drag .pd-scan{opacity:1;top:calc(6% + var(--p)*var(--s)*.86)}.t4.drag .pd-veil{filter:brightness(calc(1 + var(--p)*.8))}
 /* gift box: lacquer red, gold ribbon and wax seal */
 .t0{--c1:#d9343f;--c2:#86121e;--c3:#f2585f}
 .bx-body{left:9%;right:9%;top:38%;bottom:6%;border-radius:5% 5% 9% 9%;background:linear-gradient(90deg,#00000038,transparent 18% 82%,#0000004d),linear-gradient(172deg,var(--c1),var(--c2));box-shadow:inset 0 -7px 10px #00000057,inset 0 1px 0 #ffffff47,0 12px 20px #000b;display:grid!important;place-items:center;transition:transform calc(.5s*var(--k)) ease-in calc(.12s*var(--k)),opacity .35s calc(.3s*var(--k))}
@@ -182,28 +195,27 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 .pond-rim{position:absolute;inset:0;z-index:5;border-radius:28px;pointer-events:none;box-shadow:inset 0 0 0 2px #f2fbff,inset 0 0 0 7px #a9cbd9,inset 0 0 0 8px #ffffff99,inset 0 16px 34px 8px #00233dab}
 .bl{position:absolute;left:0;top:0;z-index:1;width:var(--d);height:var(--d);--s:var(--d);--tc:#e2b866;cursor:pointer;will-change:transform;transition:opacity .4s,filter .4s;animation:fadein .5s backwards;animation-delay:calc(var(--i)*25ms)}
 .bl-sh{position:absolute;inset:5%;border-radius:50%;background:#00182b;opacity:.45;filter:blur(5px);transform:translate(13%,19%);transition:transform .4s,opacity .4s}
-.bl-k{position:absolute;inset:0;border-radius:50%;transition:scale .3s cubic-bezier(.3,1.8,.5,1)}.bl.hold :is(.bl-k,.bl-g){scale:1.15}
+.bl-k{position:absolute;inset:0;border-radius:50%;transition:scale .3s cubic-bezier(.3,1.8,.5,1)}.bl.hold :is(.bl-k,.bl-g){scale:calc(1 + var(--p,0)*.18)}
 .bl-k i{position:absolute;left:0;right:0;height:50%;display:block;transition:transform .5s cubic-bezier(.3,1.3,.5,1),opacity .3s .18s}
 .bl-k i:first-child{top:0;border-radius:var(--d) var(--d) 0 0;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 62%,#fff),var(--c) 68%,color-mix(in srgb,var(--c) 72%,#000));box-shadow:inset 0 -3px 0 #00000033}
 .bl-k i:last-child{bottom:0;border-radius:0 0 var(--d) var(--d);background:linear-gradient(#f7f8fa,#bfc4d1);box-shadow:inset 0 3px 0 #ffffffb3}
 .bl-g{position:absolute;inset:0;border-radius:50%;background:radial-gradient(36% 28% at 31% 23%,#fffffff2,#ffffff00 72%),radial-gradient(50% 40% at 68% 82%,#ffffff40,transparent 72%);box-shadow:inset -5px -8px 12px #0000005c,inset 3px 4px 7px #ffffff73;pointer-events:none;transition:opacity .25s,scale .3s cubic-bezier(.3,1.8,.5,1)}
 .bl-pz{position:absolute;left:5%;top:5%;width:90%;height:90%;transform:scale(.2);opacity:0;transition:transform .55s cubic-bezier(.2,1.5,.4,1) .12s,opacity .2s .12s}
 .bl:after{content:'';position:absolute;inset:-9%;border-radius:50%;border:3px solid var(--g1);box-shadow:0 0 12px var(--g2),inset 0 0 8px var(--g2);opacity:0;transform:scale(1.7);pointer-events:none}
-.bl.hold{z-index:3}.bl.hold:after{animation:net .4s ease-out forwards}@keyframes net{to{opacity:1;transform:none}}
+.bl.hold{z-index:3}.bl.hold:after{opacity:calc(.35 + var(--p,0)*.65);transform:scale(calc(1.7 - var(--p,0)*.7));transition:opacity .15s,transform .15s}
 .bl.hold .bl-k{animation:roll .42s ease-in-out infinite}.bl.hold .bl-sh{transform:translate(24%,34%) scale(1.1);opacity:.28}
 .bl.open{z-index:2}.bl.open .bl-g{opacity:0}.bl.open .bl-pz{transform:none;opacity:1}
 .bl.open .bl-k i:first-child{transform:translate(-30%,-95%) rotate(-36deg);opacity:0}.bl.open .bl-k i:last-child{transform:translate(30%,95%) rotate(30deg);opacity:0}
 .bl.other .bl-pz{transform:scale(.86)}.bl.other.hi .bl-pz{transform:none}
 .rip{position:absolute;left:0;top:0;z-index:0;width:var(--d);height:var(--d);border-radius:50%;border:2px solid #ffffffd9;pointer-events:none;animation:rip 1s ease-out both}@keyframes rip{from{opacity:.9;scale:.7}to{opacity:0;scale:2.5}}
 /* spotlight: A and SP prizes get the whole stage for a moment */
-#spot{position:absolute;inset:0;z-index:30;touch-action:none;display:none;flex-direction:column;align-items:center;justify-content:center;gap:9px;overflow:hidden;cursor:pointer;--tc:#f5a300;background:radial-gradient(70% 50% at 50% 44%,#000000b3,#000000f5)}
+#spot{position:absolute;inset:0;z-index:30;touch-action:none;display:none;flex-direction:column;align-items:center;justify-content:center;gap:9px;overflow:hidden;cursor:pointer;--tc:#f5a300;background:#06070a}
 #spot.on{display:flex;animation:fadein .25s}
-.sp-rays{position:absolute;left:50%;top:42%;width:max(170cqi,900px);aspect-ratio:1;translate:-50% -50%;opacity:.6;background:repeating-conic-gradient(color-mix(in srgb,var(--tc) 60%,transparent) 0 6deg,transparent 6deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,#0009 16%,transparent 44%);mask:radial-gradient(circle,#000 0,#0009 16%,transparent 44%);animation:spin 16s linear infinite}
+.sp-rays{position:absolute;left:50%;top:42%;width:max(170cqi,900px);aspect-ratio:1;translate:-50% -50%;opacity:.6;will-change:transform;background:radial-gradient(circle,transparent 0,#06070ab3 26%,#06070a 44%),repeating-conic-gradient(color-mix(in srgb,var(--tc) 60%,transparent) 0 6deg,transparent 6deg 20deg);animation:spin 16s linear infinite}
 .sp-skip{position:absolute;bottom:16px;font-size:11px;color:#ffffff66;letter-spacing:2px;animation:fadein .5s 1s both}
 /* collectible card: two real faces, a foil layer and a glare that follow the tilt (--kx / --ky run from -1 to 1) */
 .kc{position:relative;width:var(--w);aspect-ratio:5/7;perspective:900px;--tc:#e2b866}
-.kc.sw{animation:sway 6s ease-in-out infinite}.kc.sw.live{animation:none}@keyframes sway{25%{--kx:.6;--ky:-.22}75%{--kx:-.6;--ky:.22}}
-.kc-in{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(calc(var(--kx)*15deg)) rotateX(calc(var(--ky)*-13deg))}
+.kc-in{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
 .kc-f,.kc-b{position:absolute;inset:0;border-radius:calc(var(--w)*.07);overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .kc-b{transform:rotateY(180deg)}
 .kc-f{display:flex;flex-direction:column;gap:calc(var(--w)*.035);padding:calc(var(--w)*.055);background:linear-gradient(160deg,#262935,#101117 62%);box-shadow:inset 0 0 0 calc(var(--w)*.012) var(--tc),inset 0 0 0 calc(var(--w)*.026) #0c0d13,inset 0 0 0 calc(var(--w)*.031) color-mix(in srgb,var(--tc) 45%,transparent),0 0 44px color-mix(in srgb,var(--tc) 55%,transparent)}
@@ -213,15 +225,21 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 .kc-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .kc-nm{font-size:calc(var(--w)*.07);font-weight:800;line-height:1.25;text-align:center;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
 .kc-v{font-family:var(--serif);font-size:calc(var(--w)*.105);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(180deg,#fff,var(--g1) 45%,var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.kc-foil,.kc-glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none}
-.kc-foil{opacity:var(--fo,0);mix-blend-mode:color-dodge;background:repeating-linear-gradient(115deg,transparent 0,#ff7ab8 5%,#ffe27a 10%,#8dffc8 15%,#7ad0ff 20%,#c79bff 25%,transparent 30% 42%);background-size:300% 300%;background-position:calc(50% + var(--kx)*45%) calc(50% + var(--ky)*45%)}
-.kc-glare{mix-blend-mode:soft-light;background:radial-gradient(circle at calc(50% + var(--kx)*50%) calc(50% + var(--ky)*50%),#ffffffa6,#ffffff00 58%)}
+/* tilt, foil and glare move by transform only, so the card never repaints while it turns */
+.kc-foil,.kc-glare{position:absolute;pointer-events:none;will-change:transform}
+.kc-foil{left:-100%;top:-100%;width:300%;height:300%;opacity:var(--fo,0);background:repeating-linear-gradient(115deg,transparent 0,#ff7ab866 4%,#ffe27a66 8%,#8dffc866 12%,#7ad0ff66 16%,#c79bff66 20%,transparent 24% 34%)}
+.kc-glare{left:-50%;top:-50%;width:200%;height:200%;background:radial-gradient(circle,#ffffff66,#ffffff00 40%)}
+.kc.sw .kc-in{animation:sway 6s ease-in-out infinite}.kc.sw .kc-foil{animation:foil 6s ease-in-out infinite}.kc.sw .kc-glare{animation:glare 6s ease-in-out infinite}
+@keyframes sway{25%{transform:rotateY(9deg) rotateX(3deg)}75%{transform:rotateY(-9deg) rotateX(-3deg)}}@keyframes foil{25%{transform:translate(9%,-3%)}75%{transform:translate(-9%,3%)}}@keyframes glare{25%{transform:translate(15%,-6%)}75%{transform:translate(-15%,6%)}}
 .sp-kc{position:relative;--w:min(62cqi,270px,36dvh);margin-bottom:6px}
-.sp-kc .kc{animation:kin .9s cubic-bezier(.2,1.2,.3,1) backwards,sway 6s ease-in-out 1s infinite}.sp-kc .kc.live{animation:kin .9s cubic-bezier(.2,1.2,.3,1) backwards}
-.sp-kc .kc-in{animation:kflip .95s cubic-bezier(.2,1.1,.3,1) backwards}@keyframes kin{from{scale:.15;opacity:0}}@keyframes kflip{from{transform:rotateY(-200deg)}to{transform:rotateY(0)}}
+.sp-kc .kc{animation:kin .9s cubic-bezier(.2,1.2,.3,1) backwards}@keyframes kin{from{scale:.15;opacity:0}}@keyframes kflip{from{transform:rotateY(-200deg)}to{transform:rotateY(0)}}
+.sp-kc .kc.sw .kc-in{animation:kflip .95s cubic-bezier(.2,1.1,.3,1) backwards,sway 6s ease-in-out 1s infinite}.sp-kc .kc.sw :is(.kc-foil,.kc-glare){animation-delay:1s}
+.kc.live :is(.kc-in,.kc-foil,.kc-glare){animation:none}.sp-kc .kc.live .kc-in{animation:kflip .95s cubic-bezier(.2,1.1,.3,1) backwards}
+/* while a card holds the stage nothing under it is painted */
+#stage.hush>:is(#amb,#rays,#ttl,#pool,#play,#hud,#glow,#cap,#hint){visibility:hidden}
 .pay-hero{position:relative;margin:10px 0 6px;animation:payin .5s cubic-bezier(.2,1.4,.4,1) both}
 .pay-hero>i{position:absolute;right:-9px;top:-9px;z-index:2;font-style:normal;font-weight:800;font-size:13px;color:#fff;background:#0a0b10;border-radius:1em;padding:1px .6em;box-shadow:inset 0 0 0 1px var(--tc)}
-.pay-hero.rare:before{content:'';position:absolute;left:50%;top:50%;width:calc(var(--w)*3.4);aspect-ratio:1;translate:-50% -50%;opacity:.5;background:repeating-conic-gradient(color-mix(in srgb,var(--tc) 55%,transparent) 0 6deg,transparent 6deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,#0008 20%,transparent 48%);mask:radial-gradient(circle,#000 0,#0008 20%,transparent 48%);animation:spin 18s linear infinite;pointer-events:none}
+.pay-hero.rare:before{content:'';position:absolute;left:50%;top:50%;width:calc(var(--w)*3.4);aspect-ratio:1;translate:-50% -50%;background:repeating-conic-gradient(color-mix(in srgb,var(--tc) 55%,transparent) 0 6deg,transparent 6deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,#0008 20%,transparent 48%);mask:radial-gradient(circle,#000 0,#0008 20%,transparent 48%);animation:breathe 3.6s ease-in-out infinite alternate;pointer-events:none}@keyframes breathe{from{opacity:.28}to{opacity:.6}}
 /* result */
 .pay{position:absolute;inset:0;z-index:20;display:flex;overflow-y:auto;background:radial-gradient(90% 46% at 50% 0,#e2b8662e,transparent 62%),#0a0b10fa;animation:fadein .3s}
 .pay-in{margin:auto;width:min(100%,560px);padding:14px 16px 16px;display:flex;flex-direction:column;align-items:center;gap:8px}
@@ -234,11 +252,11 @@ button{position:relative;font:inherit;color:inherit;border:0;background:none;cur
 .pay .tl>i{position:absolute;right:6%;top:6%;z-index:2;font-style:normal;font-weight:800;font-size:12px;color:#fff;background:#0a0b10d9;border-radius:1em;padding:0 .5em;box-shadow:inset 0 0 0 1px #ffffff40}
 .pay-g{display:flex;flex-wrap:wrap;gap:12px 10px;justify-content:center;--s:var(--pw)}
 #again{position:sticky;bottom:10px;z-index:3;margin-top:8px;padding:13px 46px;border-radius:14px;font-weight:900;font-size:15px;letter-spacing:3px}
-@media (prefers-reduced-motion:reduce){.sl-v,.hd,.sc,.bl,.rp g,.u-in,.mote,#amb:before,.kc,.kc-in,.pond:before,.pond:after,.sp-rays,.holo .tl-b:before{animation:none}}
+@media (prefers-reduced-motion:reduce){.sl-v,.hd,.sc,.bl,.rp g,.u-in,.mote,#amb:before,.kc,.kc-in,.kc-foil,.kc-glare,.pond:before,.pond:after,.sp-rays,.holo .tl-b:before{animation:none}}
 </style></head><body>
 <div id="userPane">
  <div id="top"><div id="bar"></div><div id="sub"></div></div>
- <div id="userModal"><div id="stage"><div id="amb"></div><div id="rays"></div><div id="ttl"></div><div id="pool"></div><div id="play"></div><div id="hud"></div><div id="glow"></div><div id="cap"></div><div id="tip"></div><div id="spot"></div></div></div>
+ <div id="userModal"><div id="stage"><div id="amb"></div><div id="rays"></div><div id="ttl"></div><div id="pool"></div><div id="play"></div><div id="hud"></div><div id="glow"></div><div id="cap"></div><div id="hint"></div><div id="tip"></div><div id="spot"></div></div></div>
  <div id="ctl"><div class="row"><label>数量</label><div class="seg" id="cnt"></div></div><div class="row"><label>预览</label><div class="seg" id="out"></div></div><div class="row"><button id="go" class="gold">重新开始</button><button id="mute" aria-label="声音"><svg class="on" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5zM15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5zM16 9.5l5 5M21 9.5l-5 5"/></svg></button></div></div>
 </div>
 <script>
@@ -261,17 +279,19 @@ const FX = (() => {
     for (const p of parts) {
       p.life++; p.vx *= p.drag; p.vy = p.vy * p.drag + p.g; p.x += p.vx + (p.sway ? Math.sin((p.life + p.ph) / 14) * p.sway : 0); p.y += p.vy; p.rot += p.vr;
       const a = Math.min(1, (p.max - p.life) / 25); ctx.save(); ctx.globalAlpha = a; ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-      if (p.k === 'spark') { ctx.globalCompositeOperation = 'lighter'; const g = ctx.createRadialGradient(0, 0, 0, 0, 0, p.s); g.addColorStop(0, p.c); g.addColorStop(1, 'transparent'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, p.s, 0, 7); ctx.fill(); }
+      if (p.k === 'spark') { ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(spr(p.c), -p.s, -p.s, p.s * 2, p.s * 2); }
       else { ctx.fillStyle = p.c; ctx.scale(1, Math.cos(p.life / 6 + p.ph)); ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); }
       ctx.restore();
     }
     raf = parts.length ? requestAnimationFrame(loop) : 0; if (!raf) ctx.clearRect(0, 0, r.width, r.height);
   }
   const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
-  const pk = a => a[Math.random() * a.length | 0];
+  const pk = a => a[Math.random() * a.length | 0], LITE = innerWidth < 500 ? .6 : 1;
+  /* each spark colour is drawn once and stamped, instead of building a gradient per particle per frame */
+  const SPR = new Map(), spr = c => { let s = SPR.get(c); if (!s) { s = document.createElement('canvas'); s.width = s.height = 32; const x = s.getContext('2d'), g = x.createRadialGradient(16, 16, 0, 16, 16, 16); g.addColorStop(0, c); g.addColorStop(1, 'transparent'); x.fillStyle = g; x.fillRect(0, 0, 32, 32); SPR.set(c, s); } return s; };
   function burst(x, y, o = {}) {
     if (RM_MOTION) return; ensure();
-    const n = o.n || 80, pw = o.power || 9, cols = o.colors || ['#f7e2ae', '#e2b866', '#fff'], life = o.life || 70;
+    const n = Math.round((o.n || 80) * LITE), pw = o.power || 9, cols = o.colors || ['#f7e2ae', '#e2b866', '#fff'], life = o.life || 70;
     for (let i = 0; i < n; i++) {
       const ang = Math.random() * Math.PI * 2, sp = pw * (.35 + Math.random() * .9), spark = !o.flat && Math.random() < .3;
       parts.push({ x, y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - pw * .35, g: o.gravity ?? .22, drag: .975, rot: Math.random() * 6, vr: (Math.random() - .5) * .3, life: 0, max: life + Math.random() * life * .85, s: (spark ? 8 + Math.random() * 10 : 6 + Math.random() * 7) * (o.size || 1), c: pk(cols), k: spark ? 'spark' : 'conf', ph: Math.random() * 9 });
@@ -279,7 +299,7 @@ const FX = (() => {
     kick();
   }
   function rain(o = {}) {
-    if (RM_MOTION) return; const r = ensure(), n = o.n || 70, dur = o.dur || 2200, cols = o.colors || ['#fff'];
+    if (RM_MOTION) return; const r = ensure(), n = Math.round((o.n || 70) * LITE), dur = o.dur || 2200, cols = o.colors || ['#fff'];
     for (let i = 0; i < n; i++) setTimeout(() => { parts.push({ x: Math.random() * r.width, y: -30, vx: (Math.random() - .5) * 1.2, vy: 1.5 + Math.random() * 2.5, g: .03, drag: .995, rot: Math.random() * 6, vr: (Math.random() - .5) * .08, life: 0, max: 400, s: 8 + Math.random() * 6, c: pk(cols), k: 'conf', sway: 1.2, ph: Math.random() * 99 }); kick(); }, Math.random() * dur);
   }
   return { burst, rain, pos, host };
@@ -355,8 +375,10 @@ const tile = (it, extra = '') => `<div class="tl${rk(it.t) >= 3 ? ' holo' : ''}"
 const tint = (el, it) => el.style.setProperty('--tc', TIER[it.t].c);
 /* collectible card for the big moments: framed art with tier, slot number, name and value. The sharper photo loads on top of the one already cached. */
 const hi = u => u.replace('w=300&h=300', 'w=640&h=640');
-const card = (it, k) => `<div class="kc" style="--tc:${TIER[it.t].c};--fo:${[0, 0, .12, .22, .34][rk(it.t)]}"><div class="kc-in"><div class="kc-f"><div class="kc-top"><b>${TIER[it.t].n}</b><span>FOLD RUSH</span><em>${k == null ? '' : '格位 ' + String(k + 1).padStart(2, '0')}</em></div><div class="kc-art"><span>${it.e}</span>${it.img ? `<img src="${it.img}" alt="" draggable="false" onerror="this.remove()"><img src="${hi(it.img)}" alt="" draggable="false" onerror="this.remove()">` : ''}</div><div class="kc-nm">${it.n}</div><div class="kc-v">${fmt(it.v)}</div><i class="kc-foil"></i><i class="kc-glare"></i></div><div class="kc-b"></div></div></div>`;
-const tiltSet = (kc, x, y) => { const cl = v => Math.max(-1, Math.min(1, v)); kc.style.setProperty('--kx', cl(x).toFixed(3)); kc.style.setProperty('--ky', cl(y).toFixed(3)); kc.classList.add('live'); clearTimeout(kc._t); kc._t = setTimeout(() => kc.classList.remove('live'), 1800); };
+const card = (it, k) => `<div class="kc" style="--tc:${TIER[it.t].c};--fo:${[0, 0, .25, .4, .55][rk(it.t)]}"><div class="kc-in"><div class="kc-f"><div class="kc-top"><b>${TIER[it.t].n}</b><span>FOLD RUSH</span><em>${k == null ? '' : '格位 ' + String(k + 1).padStart(2, '0')}</em></div><div class="kc-art"><span>${it.e}</span>${it.img ? `<img src="${it.img}" alt="" draggable="false" onerror="this.remove()"><img src="${hi(it.img)}" alt="" draggable="false" onerror="this.remove()">` : ''}</div><div class="kc-nm">${it.n}</div><div class="kc-v">${fmt(it.v)}</div><i class="kc-foil"></i><i class="kc-glare"></i></div><div class="kc-b"></div></div></div>`;
+const tiltSet = (kc, x, y) => { const cl = v => Math.max(-1, Math.min(1, v)); kc._x = cl(x); kc._y = cl(y); clearTimeout(kc._t); kc._t = setTimeout(() => { kc.classList.remove('live'); (kc._p || []).forEach(e => e.style.transform = ''); }, 1800);
+  if (kc._q) return; kc._q = requestAnimationFrame(() => { kc._q = 0; const P = kc._p || (kc._p = [kc.querySelector('.kc-in'), kc.querySelector('.kc-foil'), kc.querySelector('.kc-glare')]), x = kc._x, y = kc._y; kc.classList.add('live');
+    P[0].style.transform = `rotateY(${(x * 15).toFixed(2)}deg) rotateX(${(-y * 13).toFixed(2)}deg)`; P[1].style.transform = `translate(${(x * 12).toFixed(2)}%,${(y * 9).toFixed(2)}%)`; P[2].style.transform = `translate(${(x * 24).toFixed(2)}%,${(y * 24).toFixed(2)}%)`; }); };
 const tiltBy = (kc, e) => { const r = kc.getBoundingClientRect(); tiltSet(kc, (e.clientX - r.left - r.width / 2) / r.width, (e.clientY - r.top - r.height / 2) / r.height); };
 const ctr = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
 const cheer = (el, it) => { const k = rk(it.t), rare = k >= 3, p = FX.pos(rare ? stage : el), cols = [TIER[it.t].c, '#f7e2ae', '#e2b866', '#ffffff', '#9fe8ff'];
@@ -371,6 +393,19 @@ const shake = (el, amp) => { if (!RM_MOTION && amp && el.animate) el.animate([0,
 const shock = (els, from, amp = 7, inner = e => e) => { if (RM_MOTION) return; const o = ctr(from); els.forEach(el => { const t = inner(el); if (el === from || !t || !t.animate) return; const c = ctr(el), dx = c.x - o.x, dy = c.y - o.y, d = Math.hypot(dx, dy) || 1, f = amp * Math.max(0, 1 - d / 420); if (f < .6) return;
   t.animate([{ transform: 'translate(0,0)' }, { transform: `translate(${dx / d * f}px,${dy / d * f}px)`, offset: .3 }, { transform: 'translate(0,0)' }], { duration: 520, delay: d * .35, easing: 'cubic-bezier(.3,1.5,.5,1)' }); }); };
 const toast = it => { const t = $('#tip'); t.innerHTML = `<i style="background:${TIER[it.t].c}">${TIER[it.t].n}</i><span>${it.n}</span><b>${fmt(it.v)}</b>`; t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); };
+/* hint bubble over the thing that was touched, plus a ghost fingertip tracing the stroke on it and a small shake of the thing itself */
+const HIC = { up: 'M12 19V5M6 11l6-6 6 6', down: 'M12 5v14M6 13l6 6 6-6', lr: 'M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4', rub: 'M3 8l4.500 8 3-8 3 8 3-8 4.500 8', drag: 'M6 18L18 6M9 6h9v9' };
+const GHOST = { up: [[0, .4], [0, -.5]], down: [[0, -.4], [0, .5]], lr: [[-.5, 0], [.5, 0], [-.5, 0]], rub: [[-.3, -.3], [.3, -.12], [-.3, .08], [.3, .3]], drag: [[0, 0], [.6, -.5], [1.1, -.2]] };
+let hintT, hintAt = 0;
+const hintOff = () => { clearTimeout(hintT); $('#hint').classList.remove('on'); };
+const hint = (el, text, dir) => { const now = performance.now(); if (now - hintAt < 450) return; hintAt = now; const h = $('#hint'), s = stage.getBoundingClientRect(), r = el.getBoundingClientRect();
+  h.innerHTML = `<svg viewBox="0 0 24 24"><path d="${HIC[dir]}"/></svg><span>${text}</span>`; h.className = 'd-' + dir; const w = h.offsetWidth, cx = r.left + r.width / 2 - s.left, x = Math.max(w / 2 + 8, Math.min(s.width - w / 2 - 8, cx)), below = r.top - s.top < 56;
+  h.style.left = x.toFixed(0) + 'px'; h.style.top = (below ? r.bottom - s.top + 12 : r.top - s.top - 10).toFixed(0) + 'px'; h.style.setProperty('--ax', Math.max(10, Math.min(90, 50 + (cx - x) / w * 100)).toFixed(0) + '%'); if (below) h.classList.add('below'); void h.offsetWidth; h.classList.add('on');
+  clearTimeout(hintT); hintT = setTimeout(hintOff, 2600); SFX.tick(700); buzz(4); if (RM_MOTION || !el.animate) return;
+  el.animate([0, -4, 4, -3, 2, 0].map(v => ({ translate: v + 'px 0' })), { duration: 300, easing: 'ease-out' });
+  const hb = FX.host().getBoundingClientRect(), gh = document.createElement('i'), u = Math.max(46, r.width), pts = GHOST[dir]; gh.className = 'fgr'; gh.style.cssText = `left:${r.left + r.width / 2 - hb.left}px;top:${r.top + r.height / 2 - hb.top}px`; FX.host().appendChild(gh);
+  const kf = pts.map(([px2, py2], i) => ({ transform: `translate(${px2 * u}px,${py2 * u}px) scale(${i ? 1 : .8})`, opacity: 1 })); kf.unshift({ ...kf[0], opacity: 0 }); kf.push({ ...kf[kf.length - 1], opacity: 0 });
+  gh.animate(kf, { duration: 950, iterations: 2, easing: 'ease-in-out' }).onfinish = () => gh.remove(); setTimeout(() => gh.remove(), 2200); };
 /* camera: push in on the chosen item so it opens in close-up, light it from behind, caption it, then pull back as the prize flies to the tray */
 const CAM = { on: false, el: null };
 const camIn = (el, ms = 420) => { if (RM_MOTION || CAM.on) return false; const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect(), cs = getComputedStyle(play), z0 = parseFloat(cs.scale) || 1, t0 = cs.translate && cs.translate !== 'none' ? cs.translate.split(' ').map(parseFloat) : [0, 0];
@@ -386,9 +421,9 @@ const seal = () => { const e = document.createElement('div'); e.className = 'sea
 let SPOT = Promise.resolve(), spotOff = null;
 const spotlight = (it, k) => { const el = $('#spot'), t0 = performance.now(), hold = it.t === 'sp' ? 3800 : 3000; if (spotOff) spotOff(); tint(el, it);
   el.innerHTML = `<div class="sp-rays"></div><div class="sp-kc">${card(it, k)}</div><div class="sp-skip">拖动卡片看光泽 · 点击继续</div>`;
-  const kc = el.querySelector('.kc'); el.classList.add('on'); SFX.drum(); buzz([18, 40, 30]);
-  return SPOT = new Promise(res => { let t, p0 = null, mv = 0; const off = () => { clearTimeout(t); if (spotOff === off) spotOff = null; el.classList.remove('on'); el.onclick = el.onpointerdown = el.onpointermove = null; res(); }, arm = () => { clearTimeout(t); t = setTimeout(off, hold); };
-    spotOff = off; arm(); el.onpointerdown = e => { p0 = [e.clientX, e.clientY]; mv = 0; };
+  const kc = el.querySelector('.kc'); kc.classList.add('sw'); el.classList.add('on'); SFX.drum(); buzz([18, 40, 30]);
+  return SPOT = new Promise(res => { let t, p0 = null, mv = 0; const off = () => { clearTimeout(t); if (spotOff === off) spotOff = null; el.classList.remove('on'); stage.classList.remove('hush'); el.onclick = el.onpointerdown = el.onpointermove = null; res(); }, arm = () => { clearTimeout(t); t = setTimeout(off, hold); };
+    spotOff = off; arm(); setTimeout(() => { if (spotOff === off) stage.classList.add('hush'); }, 300); el.onpointerdown = e => { p0 = [e.clientX, e.clientY]; mv = 0; };
     el.onpointermove = e => { tiltBy(kc, e); if (p0) mv = Math.max(mv, Math.hypot(e.clientX - p0[0], e.clientY - p0[1])); arm(); };   /* playing with the card keeps it on screen */
     el.onclick = () => { if (performance.now() - t0 > 450 && mv < 10) off(); p0 = null; }; }); };
 /* a revealed prize flies into the next slot of the tray under the stage */
@@ -404,24 +439,28 @@ const showRest = (G, els, fill, from) => { const o = from && ctr(from), ds = els
 
 /* ---------- ⓪ blind-box wall, 5 wrapper styles ---------- */
 const TYPES = [
-  { n: '礼盒', w: '<i class="bx-body"><b>?</b></i><i class="bx-lid"></i>' },
-  { n: '福袋', w: '<i class="bg-body"><b>?</b></i><i class="bg-top"></i><i class="bg-tear"></i>' },
-  { n: '扭蛋', w: '<i class="cp-t"></i><i class="cp-b"><b>?</b></i>' },
-  { n: '卡牌', w: '<i class="cd-b"><b>?</b></i>' },
-  { n: '神秘格', w: '<i class="pd-base"></i><i class="pd-veil"><b>?</b></i><i class="pd-scan"></i>' }];
+  { n: '礼盒', g: 'up', ic: 'up', ask: '向上掀开', tip: '按住盒子向上滑，掀开盒盖', more: '再往上滑一点，把盒盖掀开', w: '<i class="bx-body"><b>?</b></i><i class="bx-lid"></i>' },
+  { n: '福袋', g: 'lr', ic: 'lr', ask: '横向撕开', tip: '按住福袋横向滑，撕开封口', more: '再滑远一点，把封口撕到底', w: '<i class="bg-body"><b>?</b></i><i class="bg-top"></i><i class="bg-tear"></i>' },
+  { n: '扭蛋', g: 'twist', ic: 'lr', ask: '左右拧开', tip: '按住扭蛋左右来回拧，拧开它', more: '多拧几下，就拧开了', w: '<i class="cp-t"></i><i class="cp-b"><b>?</b></i>' },
+  { n: '卡牌', g: 'lr', ic: 'lr', ask: '横滑翻开', tip: '按住卡牌横向滑，把它翻过来', more: '再滑远一点，把牌翻过来', w: '<i class="cd-b"><b>?</b></i>' },
+  { n: '神秘格', g: 'down', ic: 'down', ask: '向下划开', tip: '按住格子向下划，扫描解锁', more: '再往下划到底，完成扫描', w: '<i class="pd-base"></i><i class="pd-veil"><b>?</b></i><i class="pd-scan"></i>' }];
 function wall(G) {
   const Wd = play.clientWidth, Hd = play.clientHeight, cols = Wd >= 640 ? 5 : 4, rows = N / cols, g = Wd < 420 ? 9 : 16, s = Math.floor(Math.max(50, Math.min((Wd - 24 - (cols - 1) * g) / cols, (Hd - 16 - (rows - 1) * g) / rows, 150)));
   play.innerHTML = `<div class="grid board" style="--s:${s}px;--g:${g}px;--cols:${cols}">${G.cells.map((_, k) => `<div class="u t${S}" style="--i:${k}"><div class="u-in"><i class="u-gl"></i><div class="u-pz"></div><div class="u-w">${TYPES[S].w}</div></div></div>`).join('')}</div>`;
   const root = play.firstChild, us = [...root.children], fill = (el, it) => el.querySelector('.u-pz').innerHTML = tile(it);
-  const MAT = ['box', 'bag', 'cap', 'card', 'cell'][S];
-  const open = (k, fast) => run(async () => { if (!G.claim(k)) return; const el = us[k], it = G.cells[k]; tint(el, it); fill(el, it); el.classList.remove('dn'); el.classList.add('mine', 'pre'); const cam = !fast && camIn(el);
-    await W(RM_MOTION ? 120 : cam ? 560 : 420); el.classList.remove('pre'); el.classList.add('open'); SFX.open(MAT); buzz(14); shock(us, el, 8, u => u.firstChild); if (cam) beam(it); await W(520); el.classList.add('done'); G.done(k, el); });
-  /* the press is felt the moment the finger lands; the pick is made on release */
-  const lift = () => root.querySelectorAll('.dn').forEach(u => u.classList.remove('dn'));
-  root.onpointerdown = e => { const u = e.target.closest('.u'); if (!u || u.classList.contains('mine')) return; const r = u.getBoundingClientRect();
-    u.style.setProperty('--px', ((e.clientX - r.left) / r.width * 2 - 1).toFixed(2)); u.style.setProperty('--py', ((e.clientY - r.top) / r.height * 2 - 1).toFixed(2)); u.classList.add('dn'); SFX.press(MAT); buzz(6); tapFx(e.clientX, e.clientY); };
-  root.onpointerup = root.onpointercancel = root.onpointerleave = lift;
-  root.onclick = e => { const u = e.target.closest('.u'); if (u) open(us.indexOf(u)); };
+  const MAT = ['box', 'bag', 'cap', 'card', 'cell'][S], T = TYPES[S], D = Math.max(40, s * .7);
+  const open = (k, fast, held) => run(async () => { const el = us[k]; if (!G.claim(k)) return el.classList.remove('drag'); const it = G.cells[k]; tint(el, it); fill(el, it); el.classList.remove('dn'); el.classList.add('mine'); if (!held) el.classList.add('pre'); const cam = !fast && camIn(el);
+    await W(RM_MOTION ? 120 : held ? (cam ? 440 : 90) : 420); el.classList.remove('pre', 'drag'); el.classList.add('open'); SFX.open(MAT); buzz(14); shock(us, el, 8, u => u.firstChild); if (cam) beam(it); await W(520); el.classList.add('done'); G.done(k, el); });
+  /* nothing opens on a tap. Each wrapper is opened by hand (lift the lid, tear the seal, twist the capsule, turn the card, swipe the scanner): it follows the finger (--p, 0 to 1) and gives way at the end of the stroke */
+  const lift = () => root.querySelectorAll('.dn').forEach(u => u.classList.remove('dn')); let gs = null;
+  root.onpointerdown = e => { const u = e.target.closest('.u'); if (!u || gs || u.classList.contains('mine')) return; const r = u.getBoundingClientRect();
+    u.style.setProperty('--px', ((e.clientX - r.left) / r.width * 2 - 1).toFixed(2)); u.style.setProperty('--py', ((e.clientY - r.top) / r.height * 2 - 1).toFixed(2)); u.classList.add('dn'); SFX.press(MAT); buzz(6); tapFx(e.clientX, e.clientY);
+    gs = { u, k: us.indexOf(u), id: e.pointerId, x: e.clientX, y: e.clientY, lx: e.clientX, path: 0, mv: 0, st: 0 }; try { u.setPointerCapture(e.pointerId); } catch (x) { } };
+  root.onpointermove = e => { if (!gs || e.pointerId !== gs.id) return; const u = gs.u, dx = e.clientX - gs.x, dy = e.clientY - gs.y; gs.mv = Math.max(gs.mv, Math.hypot(dx, dy)); gs.path += Math.abs(e.clientX - gs.lx); gs.lx = e.clientX; if (gs.mv < 6) return;
+    const p = Math.max(0, Math.min(1, T.g === 'up' ? -dy / D : T.g === 'down' ? dy / D : T.g === 'twist' ? gs.path / (D * 2.4) : Math.abs(dx) / D)), st = p * 6 | 0;
+    u.classList.remove('dn'); u.classList.add('drag'); u.style.setProperty('--p', p.toFixed(3)); if (T.g === 'twist') u.style.setProperty('--tw', (Math.max(-1, Math.min(1, dx / s)) * 30).toFixed(1));
+    if (st !== gs.st) { gs.st = st; SFX.creak(p * 30); buzz(3); } if (p >= 1) { const k = gs.k; gs = null; open(k, false, true); } };
+  root.onpointerup = root.onpointercancel = e => { lift(); if (!gs || e.pointerId !== gs.id) return; const { u, mv } = gs; gs = null; u.classList.remove('drag'); if (e.type === 'pointerup') hint(u, mv < 6 ? T.tip : T.more, T.ic); };
   return { pick: k => open(k, true), lock: () => root.classList.add('lock'), rest: from => showRest(G, us, fill, from) };
 }
 /* ---------- ① string pull ---------- */
@@ -450,13 +489,13 @@ function rope(G) {
     await W(pre); sl.classList.add('tug'); await W(340); sl.classList.remove('tug'); g.classList.remove('pull');
     const it = G.cells[k]; sl.firstChild.innerHTML = tile(it);[sl, h, lit].forEach(e => tint(e, it)); sl.classList.add('open'); SFX.snap(); buzz(14); tw(i, 12, 520, spring); twang(g, lit); shock(sls, sl, 6); if (cam) beam(it);
     await W(430); sl.classList.add('done', 'mine'); G.done(k, sl); });
-  /* a tag can be tapped, or really pulled: it follows the finger with a rubber-band limit, ratchets as it goes, and fires once it is dragged past the threshold */
+  /* a tag has to be really pulled: it follows the finger with a rubber-band limit, ratchets as it goes, and fires once it is dragged past the threshold. A tap, or a pull that stops short, only brings up the hint */
   const MAXD = 34, THR = 22; let drag = null;
   root.onpointerdown = e => { const h = e.target.closest('.hd'); if (!h || drag || h.classList.contains('on')) return; const i = +h.dataset.i; drag = { i, id: e.pointerId, y0: e.clientY, mv: 0, st: 0 };
     try { h.setPointerCapture(e.pointerId); } catch (x) { } P[i].tk++; setDy(i, 5); SFX.press('rope'); buzz(6); tapFx(e.clientX, e.clientY); };
   root.onpointermove = e => { if (!drag || e.pointerId !== drag.id) return; const raw = e.clientY - drag.y0, dy = raw <= 0 ? 5 : 5 + MAXD * (1 - Math.exp(-raw / MAXD)), st = dy / 6 | 0; drag.mv = Math.max(drag.mv, Math.abs(raw)); setDy(drag.i, dy);
     if (st !== drag.st) { drag.st = st; SFX.creak(dy); buzz(3); } hs[drag.i].classList.toggle('arm', dy >= THR); };
-  const drop = (e, cancel) => { if (!drag || (e && e.pointerId !== drag.id)) return; const { i, mv } = drag, dy = P[i].dy; drag = null; hs[i].classList.remove('arm'); !cancel && (mv < 6 || dy >= THR) ? pull(i) : tw(i, 0, 380, spring); };
+  const drop = (e, cancel) => { if (!drag || (e && e.pointerId !== drag.id)) return; const { i, mv } = drag, dy = P[i].dy; drag = null; hs[i].classList.remove('arm'); if (!cancel && dy >= THR) return pull(i); tw(i, 0, 380, spring); if (!cancel) hint(hs[i], mv < 6 ? '按住吊牌向下拉，拉到发光再松手' : '再往下拉一点，拉到发光再松手', 'down'); };
   root.onpointerup = e => drop(e); root.onpointercancel = e => drop(e, true);
   return { pick: k => pull(perm.indexOf(k), true), lock: () => root.classList.add('lock'), rest: from => { root.classList.add('end'); showRest(G, sls, (el, it) => el.firstChild.innerHTML = tile(it), from); } };
 }
@@ -487,11 +526,14 @@ function scratch(G) {
   els.forEach((el, k) => { const cv = el.lastChild, c = st[k].c = cv.getContext('2d', { willReadFrequently: true }); cv.width = cv.height = px; coat(c);
     let last = null, moved = 0, cnt = 0;
     const pt = e => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * px, y: (e.clientY - r.top) / r.height * px }; };
-    cv.onpointerdown = e => { if (st[k].fin || st[k].busy) return; if (G.free(k)) { if (!G.claim(k)) return; arm(k); } try { cv.setPointerCapture(e.pointerId); } catch (x) { } last = pt(e); moved = 0; rub(c, last, last); el.classList.add('dn'); tapFx(e.clientX, e.clientY); buzz(6); SFX.scratch(.8); };
-    cv.onpointermove = e => { if (!last || st[k].fin) return; const p = pt(e), dd = Math.hypot(p.x - last.x, p.y - last.y); moved += dd; rub(c, last, p); last = p; SFX.scratch(Math.min(1, dd / (px * .14)));
+    cv.onpointerdown = e => { if (st[k].fin || st[k].busy || (G.free(k) && G.mine.length >= G.K)) return; try { cv.setPointerCapture(e.pointerId); } catch (x) { } last = pt(e); moved = 0; el.classList.add('dn'); tapFx(e.clientX, e.clientY); buzz(6); if (!G.free(k)) { rub(c, last, last); SFX.scratch(.8); } };
+    cv.onpointermove = e => { if (!last || st[k].fin) return; const p = pt(e), dd = Math.hypot(p.x - last.x, p.y - last.y);
+      if (G.free(k)) { if (dd < px * .12) return; if (!G.claim(k)) { last = null; return; } arm(k); }   /* a cell is only chosen once a real scratch starts; a tap changes nothing */
+      moved += dd; rub(c, last, p); last = p; SFX.scratch(Math.min(1, dd / (px * .14)));
       if (++cnt % 3 === 0) { const h = FX.host().getBoundingClientRect(); flakes(e.clientX - h.left, e.clientY - h.top); buzz(3); }
       if (cnt % 5 === 0 && ratio(c) > .5) finish(k); };
-    cv.onpointerup = cv.onpointercancel = () => { el.classList.remove('dn'); if (!last) return; last = null; if (st[k].fin) return; moved < px * .1 ? sweep(k) : ratio(c) > .5 && finish(k); };   /* a plain tap scratches the cell for you */
+    cv.onpointerup = cv.onpointercancel = e => { el.classList.remove('dn'); if (!last) return; last = null; if (st[k].fin) return; if (!G.free(k) && ratio(c) > .5) return finish(k);
+      if (e.type === 'pointerup') hint(el, G.free(k) ? '按住涂层来回刮，亲手刮开' : '再多刮一些，刮开一半就揭晓', 'rub'); };
   });
   return { pick: k => { quick = true; if (G.claim(k)) { arm(k); sweep(k); } }, lock: () => root.classList.add('lock'), flush: () => { quick = true; G.mine.forEach(sweep); }, flushLabel: '帮我刮开',
     rest: from => showRest(G, els, (el, it) => el.firstChild.innerHTML = tile(it), from) };
@@ -522,11 +564,18 @@ function pond(G) {
   const push = (x, y, F, R) => b.forEach(o => { if (o.fz) return; const dx = o.x + d / 2 - x, dy = o.y + d / 2 - y, ds = Math.hypot(dx, dy) || 1; if (ds < R) { const f = F * (1 - ds / R); o.vx += dx / ds * f; o.vy += dy / ds * f; } });
   const drops = (x, y, n) => FX.burst(x, y, { n, power: 3.6, life: 26, size: .6, flat: true, colors: ['#ffffff', '#d9f6ff', '#8fdcf5'] });
   const poke = e => { const r = root.getBoundingClientRect(), h = FX.host().getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; ripple({ x: x - d / 2, y: y - d / 2 }); push(x, y, 320, d * 2.6); SFX.drop(); buzz(4); drops(e.clientX - h.left, e.clientY - h.top, 6); };
-  const scoop = (k, fast) => run(async () => { if (!G.claim(k)) return; const o = b[k], el = o.el, cam = !fast && camIn(el, 480); o.fz = true; o.sk.style.transform = ''; el.classList.add('hold'); SFX.splash(); ripple(o); push(o.x + d / 2, o.y + d / 2, 300, d * 2.4);
+  const loose = o => { const a = rnd(0, 6.28); o.fz = false; o.vx = Math.cos(a) * o.sp; o.vy = Math.sin(a) * o.sp; o.el.classList.remove('hold'); o.el.style.removeProperty('--p'); };
+  const scoop = (k, fast, held) => run(async () => { const o = b[k], el = o.el; if (!G.claim(k)) { if (held) loose(o); return; } const cam = !fast && camIn(el, 480); o.fz = true; o.sk.style.transform = ''; el.classList.add('hold'); el.style.setProperty('--p', 1); SFX.splash(); ripple(o); push(o.x + d / 2, o.y + d / 2, 300, d * 2.4);
     const p = FX.pos(el); drops(p.x, p.y, 14);
-    await W(RM_MOTION ? 150 : 600); const it = G.cells[k]; tint(el, it); o.pz.innerHTML = tile(it); el.classList.remove('hold'); el.classList.add('open'); SFX.open('cap'); buzz(14); if (cam) beam(it);
+    await W(RM_MOTION ? 150 : held ? (cam ? 480 : 260) : 600); const it = G.cells[k]; tint(el, it); o.pz.innerHTML = tile(it); el.classList.remove('hold'); el.classList.add('open'); SFX.open('cap'); buzz(14); if (cam) beam(it);
     await W(430); el.classList.add('done', 'mine'); G.done(k, el); });
-  root.onpointerdown = e => { const el = e.target.closest('.bl'), k = el ? +el.dataset.k : -1; if (k >= 0 && G.free(k) && G.mine.length < G.K) { tapFx(e.clientX, e.clientY); scoop(k); } else poke(e); };
+  /* a capsule has to be fished out by hand: press it and drag it through the water (it shoves the others aside) until the net has closed around it. Let go early and it drifts off again */
+  const NEED = Math.max(64, d * 1.15); let grab = null;
+  root.onpointerdown = e => { const el = e.target.closest('.bl'), k = el ? +el.dataset.k : -1; if (grab) return; if (!(k >= 0 && G.free(k) && G.mine.length < G.K)) return poke(e); const o = b[k];
+    grab = { k, o, id: e.pointerId, x0: e.clientX, y0: e.clientY, ox: o.x, oy: o.y, mv: 0, st: 0 }; try { root.setPointerCapture(e.pointerId); } catch (x) { } o.fz = true; o.sk.style.transform = ''; el.classList.add('hold'); el.style.setProperty('--p', 0); tapFx(e.clientX, e.clientY); SFX.drop(); buzz(6); ripple(o); };
+  root.onpointermove = e => { if (!grab || e.pointerId !== grab.id) return; const o = grab.o, dx = e.clientX - grab.x0, dy = e.clientY - grab.y0, ds = Math.hypot(dx, dy), p = Math.min(1, ds / NEED), st = p * 5 | 0; grab.mv = Math.max(grab.mv, ds); o.x = grab.ox + dx; o.y = grab.oy + dy; o.el.style.setProperty('--p', p.toFixed(2)); if (RM_MOTION) paint();
+    if (st !== grab.st) { grab.st = st; SFX.drop(); buzz(3); } if (p >= 1) { const k = grab.k; grab = null; scoop(k, false, true); } };
+  root.onpointerup = root.onpointercancel = e => { if (!grab || e.pointerId !== grab.id) return; const o = grab.o, tap = grab.mv < 8; grab = null; loose(o); ripple(o); if (e.type === 'pointerup') hint(o.el, tap ? '按住扭蛋拖动，把它捞出水面' : '再拖远一点，金圈收紧就捞起来了', 'drag'); };
   return { pick: k => scoop(k, true), lock: () => { }, rest: from => { end = true; showRest(G, els, (el, it) => { const o = b[els.indexOf(el)]; o.fz = true; o.pz.innerHTML = tile(it); }, from); } };
 }
 const IC = {
@@ -534,7 +583,7 @@ const IC = {
   rope: '<svg viewBox="0 0 24 24"><path d="M6 3c0 6 12 6 12 12M18 3c0 6-12 6-12 12"/><circle cx="6" cy="18.5" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/></svg>',
   scratch: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 15l2.500-5 2 4 2-6 3.500 7"/></svg>',
   pond: '<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.500"/><path d="M6.500 9h11M3 18.500c2-1.500 4-1.500 6 0s4 1.500 6 0 4-1.500 6 0"/></svg>' };
-const MODES = [{ n: '盲盒墙', ic: 'wall', ask: K => `请点选 <b>${K}</b> 个`, build: wall }, { n: '拉绳', ic: 'rope', ask: K => `下拉 <b>${K}</b> 根绳`, build: rope }, { n: '刮刮乐', ic: 'scratch', ask: K => `请刮开 <b>${K}</b> 格`, build: scratch }, { n: '捞扭蛋', ic: 'pond', ask: K => `请捞起 <b>${K}</b> 颗`, build: pond }];
+const MODES = [{ n: '盲盒墙', ic: 'wall', ask: K => `${TYPES[S].ask} <b>${K}</b> 个`, build: wall }, { n: '拉绳', ic: 'rope', ask: K => `下拉 <b>${K}</b> 根绳`, build: rope }, { n: '刮刮乐', ic: 'scratch', ask: K => `亲手刮开 <b>${K}</b> 格`, build: scratch }, { n: '捞扭蛋', ic: 'pond', ask: K => `拖动捞起 <b>${K}</b> 颗`, build: pond }];
 
 /* ---------- one round: deal, let the player pick K, reveal the rest ---------- */
 function round(K) {
@@ -552,7 +601,7 @@ function round(K) {
       claim(k) { if (id !== RID || mine.length >= K || mine.includes(k)) return false;
         /* demo-only preview control: lets you see a chosen rarity on the last pick; a live system must never move prizes after the round is dealt */
         if (OUT !== 'rand') swap(k, mine.length === K - 1 ? c => c.t === OUT : c => rk(c.t) < 2);
-        const sd = stage.querySelector('.seal'); if (sd) sd.remove(); mine.push(k); PICKED = true; buzz(8); SFX.step(mine.length - 1); if (mine.length === K) view.lock(); upd(false);
+        const sd = stage.querySelector('.seal'); if (sd) sd.remove(); hintOff(); mine.push(k); PICKED = true; buzz(8); SFX.step(mine.length - 1); if (mine.length === K) view.lock(); upd(false);
         const n = stat.querySelector('.n'); if (n && n.animate && !RM_MOTION) n.animate([{ transform: 'scale(1.9)', color: '#f7e2ae' }, { transform: 'scale(1)' }], { duration: 380, easing: 'cubic-bezier(.2,1.6,.4,1)' }); return true; },
       /* a reveal seen in close-up is held for a beat under its caption before the prize leaves for the tray */
       done(k, el) { const it = cells[k], cam = CAM.on && CAM.el === el; lastEl = el; cheer(el, it);
@@ -578,7 +627,7 @@ function result(list) {
   countUp($('#psum'), list.reduce((s, i) => s + i.v, 0)); $('#again').onclick = go; const pay = stage.querySelector('.pay'), kc = pay.querySelector('.kc'); kc.classList.add('sw'); pay.onpointermove = e => tiltBy(kc, e); SFX.win(rk(top[0].t) >= 3 ? 'a' : 'b');
 }
 async function go() {
-  RID++; PICKED = false; if (spotOff) spotOff(); camOut(); stage.querySelectorAll('.pay,.seal').forEach(x => x.remove()); document.querySelectorAll('.fly').forEach(x => x.remove()); play.innerHTML = ''; $('#pool').innerHTML = ''; const hud = $('#hud'); hud.innerHTML = ''; hud.onclick = null; $('#tip').classList.remove('on');
+  RID++; PICKED = false; if (spotOff) spotOff(); camOut(); hintOff(); stage.querySelectorAll('.pay,.seal').forEach(x => x.remove()); document.querySelectorAll('.fly').forEach(x => x.remove()); play.innerHTML = ''; $('#pool').innerHTML = ''; const hud = $('#hud'); hud.innerHTML = ''; hud.onclick = null; $('#tip').classList.remove('on');
   $('#ttl').innerHTML = `<small>自选 ${CNT} 个</small><b>iPhone Duo Fold Rush</b>`; SFX.deal(V === 3 ? 0 : N);
   try { const got = await round(CNT); hud.onclick = null; result(got); } catch (e) { if (e !== 'x') { console.error(e); window.__err = String(e.stack || e); } }
 }
